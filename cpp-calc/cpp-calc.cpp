@@ -76,7 +76,6 @@ int calculate(string str) {
 }
 
 string fmuldiv(string str) {
-	cout << str << endl;
 	char symb;int res_pc;
 	int cord[2];
 	for (int i = 0; i < str.length();i++) {
@@ -114,7 +113,6 @@ string fmuldiv(string str) {
 			str.replace(cord[0], (cord[1] - cord[0] + 1), to_string(res_pc));
 		}
 	}
-	cout << str << endl;
 	return to_string(calculate(str));
 }
 
