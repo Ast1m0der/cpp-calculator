@@ -38,7 +38,7 @@ int calculate(string str) {
 			c = symb;
 			sign = true;
 		}
-		if (digit && finish) {
+		if (digit && finish && sign) {
 			switch (c)
 			{
 			case '-':
@@ -73,6 +73,38 @@ int calculate(string str) {
 	return res;
 }
 
+string fmuldiv(string str) {
+	char symb;int res_pc;
+	int cord[2];
+	for (int i = 0; i < str.length();i++) {
+		symb = str[i];
+		if (symb == '*' || symb == '/') {
+			for (int j = i; j < str.length();j++) {
+				char symb_i = str[j];
+				if (isdigit(symb_i)) {
+					if (!isdigit(str[j + 1]) || (j + 1) >= str.length()) {
+						cord[1] = j;
+						break;
+					}
+				}
+			}
+			for (int j = i; j > 0;j--) {
+				char symb_i = str[j];
+				if (isdigit(symb_i)) {
+					if (!isdigit(str[j - 1]) || (j - 1) < 0) {
+						cord[0] = j;
+						break;
+					}
+				}
+				
+			}
+			res_pc = calculate(str.substr(cord[0], (cord[1] - cord[0] + 1)));
+			str.replace(cord[0], (cord[1] - cord[0] + 1), to_string(res_pc));
+		}
+	}
+	return to_string(calculate(str));
+}
+
 int main() {
 	SetConsoleOutputCP(65001);
 	SetConsoleCP(1251);
@@ -81,7 +113,7 @@ int main() {
 	cout << "Введите выражение: ";
 	getline(cin, str);
 	bool finish = false;
-	int res_p;
+	string res_p;
 	while (!finish) {
 		int br[2];bool is_br = false;
 		for (int i = 0; i < str.length(); i++) {
@@ -99,9 +131,9 @@ int main() {
 			}
 		}
 		if (is_br) {
-			res_p = calculate(str.substr(br[0], (br[1] - br[0] + 1)));
-			str.replace(br[0], (br[1] - br[0] + 1), to_string(res_p));
+			res_p = fmuldiv(str.substr(br[0], (br[1] - br[0] + 1)));
+			str.replace(br[0], (br[1] - br[0] + 1), res_p);
 		}
 	}
-	cout << "Ответ: " << calculate(str) << endl;
+	cout << "Ответ: " << fmuldiv(str) << endl;
 }
