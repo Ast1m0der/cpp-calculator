@@ -26,7 +26,9 @@ int calculate(string str) {
 		if (symb == '-' && (first || sign)) {
 			num_str += symb;
 		}
-
+		if (num_str.substr(0, 2) == "--") {
+			num_str.replace(0, 2, "");
+			}
 		if (digit && finish && first) {
 			res = stoi(num_str);
 			first = false;
@@ -34,7 +36,7 @@ int calculate(string str) {
 			num_str = "";
 			finish = false;
 		}
-		if ((symb == '+' || symb == '-' || symb == '*' || symb == '/') && !sign) {
+		if ((symb == '+' || symb == '-' || symb == '*' || symb == '/') && !sign && !first) {
 			c = symb;
 			sign = true;
 		}
@@ -74,6 +76,7 @@ int calculate(string str) {
 }
 
 string fmuldiv(string str) {
+	cout << str << endl;
 	char symb;int res_pc;
 	int cord[2];
 	for (int i = 0; i < str.length();i++) {
@@ -82,16 +85,25 @@ string fmuldiv(string str) {
 			for (int j = i; j < str.length();j++) {
 				char symb_i = str[j];
 				if (isdigit(symb_i)) {
-					if (!isdigit(str[j + 1]) || (j + 1) >= str.length()) {
+					if ((j + 1) > str.length()) {
+						cord[1] = j;
+						break;
+					}
+					if (!isdigit(str[j + 1])) {
 						cord[1] = j;
 						break;
 					}
 				}
 			}
-			for (int j = i; j > 0;j--) {
+			
+			for (int j = i; j >= 0; j--) {
 				char symb_i = str[j];
 				if (isdigit(symb_i)) {
-					if (!isdigit(str[j - 1]) || (j - 1) < 0) {
+					if ((j - 1) < 0) {
+						cord[0] = j;
+						break;
+					}
+					else if (!isdigit(str[j - 1])) {
 						cord[0] = j;
 						break;
 					}
@@ -102,6 +114,7 @@ string fmuldiv(string str) {
 			str.replace(cord[0], (cord[1] - cord[0] + 1), to_string(res_pc));
 		}
 	}
+	cout << str << endl;
 	return to_string(calculate(str));
 }
 
